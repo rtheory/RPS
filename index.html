@@ -5,29 +5,35 @@
 </head>
 <body>
   <script>
+    const CHOICES = ["rock", "paper", "scissors"];
+
     function computerPlay(){
-      let choices = ["rock", "paper", "scissors"];
-      let rand = Math.random() * choices.length;
-      rand = Math.floor(rand);
-      return choices[rand];
+      let rand = Math.floor(Math.random() * CHOICES.length);
+      return CHOICES[rand];
     }
 
-    function playRound(playerSelection, computerSelection){
-      playerSelection = playerSelection.toLowerCase();
-      
+    function playRound(playerSelection, computerSelection){      
       if (playerSelection === computerSelection) {
         return "It's a tie! Try again";
       } 
+
       if ((playerSelection === "paper" && computerSelection === "rock") || (playerSelection === "scissors" && computerSelection === "paper") || (playerSelection === "rock" && computerSelection === "scissors")){
         return `You Win! ${playerSelection} beats ${computerSelection}`;
-      } else {
-        return `You Lose! ${computerSelection} beats ${playerSelection}`;
-      }
+      } 
+      
+      return `You Lose! ${computerSelection} beats ${playerSelection}`;
     }
 
     function getSelections(){
-      const playerSelection = prompt("Rock, Paper, or Scissors?");
+      let playerSelection = prompt("Rock, Paper, or Scissors?").toLowerCase();
       const computerSelection = computerPlay();
+
+      // Make sure player types something valid
+      while (!CHOICES.includes(playerSelection)){
+        console.log("Invalid selection. Please select from rock, paper, or scissors")
+        playerSelection = prompt("Rock, Paper, or Scissors?").toLowerCase();
+      }
+
       return [playerSelection, computerSelection];
     }
 
@@ -36,10 +42,9 @@
 
       // Play (loop) the number of rounds specified
       for (let round = 0; round < rounds; round++){
-        // Get selections from player and computer
-        let selections = getSelections();
 
-        // Play and get result
+        // Get selections from player/computer and run the round
+        let selections = getSelections();
         let result = playRound(selections[0], selections[1]);
 
         // Keep trying again if there was a tie
@@ -58,7 +63,7 @@
         console.log('')
       }
       
-      // Print results of the game
+      // Print whether or not the player won
       playerScore > computerScore ? console.log("You win!") : console.log("You lose :(")
     }
 

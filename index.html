@@ -4,13 +4,18 @@
   <title>Page Title</title>
 </head>
 <body>
+  <center>
+    <h1>Rock, Paper, Scissors</h1>
+    <h3>Player 0 - Computer 0</h3>
+    <p>Please select an option:</p>
+    <button id="rock">Rock</button>
+    <button id="paper">Paper</button>
+    <button id="scissors">Scissors</button>
+    <div id="gameResultsContainer"></div>
+  </center>
+
   <script>
     const CHOICES = ["rock", "paper", "scissors"];
-
-    function computerPlay(){
-      let rand = Math.floor(Math.random() * CHOICES.length);
-      return CHOICES[rand];
-    }
 
     function playRound(playerSelection, computerSelection){      
       if (playerSelection === computerSelection) {
@@ -24,47 +29,42 @@
       return `You Lose! ${computerSelection} beats ${playerSelection}`;
     }
 
-    function getSelections(){
-      let playerSelection = prompt("Rock, Paper, or Scissors?").toLowerCase();
-      const computerSelection = computerPlay();
-
-      // Make sure player types something valid
-      while (!CHOICES.includes(playerSelection)){
-        console.log("Invalid selection. Please select from rock, paper, or scissors")
-        playerSelection = prompt("Rock, Paper, or Scissors?").toLowerCase();
-      }
-
-      return [playerSelection, computerSelection];
+    function getComputerSelection(){
+      let rand = Math.floor(Math.random() * CHOICES.length);
+      let computerSelection = CHOICES[rand];
+      return computerSelection;
     }
 
     function game(rounds = 5){
       let playerScore = 0, computerScore = 0;
 
-      // Play (loop) the number of rounds specified
-      for (let round = 0; round < rounds; round++){
+      const gameResultsContainer = document.querySelector("#gameResultsContainer");
+      const gameScoreContainer = document.querySelector("h3");
 
-        // Get selections from player/computer and run the round
-        let selections = getSelections();
-        let result = playRound(selections[0], selections[1]);
+      // Establish buttons for player
+      let btns = document.querySelectorAll("button");
+      btns.forEach(btn => {
+        btn.addEventListener('click', function(e){
+          // Get selection and play the game
+          playerSelection = e.target.id;
+          let result = playRound(playerSelection, getComputerSelection());
 
-        // Keep trying again if there was a tie
-        while (result.includes("tie")) {
-          console.log(result);
-          let selections = getSelections();
-          result = playRound(selections[0], selections[1]);
-        } 
-        
-        // Increment scores based on result
-        result.includes("Win") ? playerScore++ : computerScore++;
+          // Increment scores based on result
+          if (result.includes("Win")){
+            playerScore++;
+          } else if (result.includes("Lose")){
+            computerScore++;
+          }
 
-        // Print results of the round with newline
-        console.log(result);
-        console.log(`SCORES:  Player ${playerScore} : Computer ${computerScore}`);
-        console.log('');
-      }
-      
-      // Print whether or not the player won
-      playerScore > computerScore ? console.log("You win!") : console.log("You lose :(");
+          // Print results of the round with newline
+          let content = document.createElement("p");
+          content.textContent = result;
+          gameResultsContainer.appendChild(content);
+          gameScoreContainer.textContent = `Player ${playerScore} - Computer ${computerScore}`;
+        });
+      });
+
+
     }
 
     game();

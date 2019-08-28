@@ -25,31 +25,41 @@
       }
     }
 
+    function getSelections(){
+      const playerSelection = "rock";
+      const computerSelection = computerPlay();
+      return [playerSelection, computerSelection];
+    }
+
     function game(rounds = 5){
       let playerScore = 0, computerScore = 0;
 
       // Play (loop) the number of rounds specified
       for (let round = 0; round < rounds; round++){
         // Get selections from player and computer
-        const playerSelection = "rock";
-        const computerSelection = computerPlay();
+        let selections = getSelections();
 
         // Play and get result
-        let result = playRound(playerSelection, computerSelection);
+        let result = playRound(selections[0], selections[1]);
 
         // Keep trying again if there was a tie
-        //while (result.includes("tie")) {
-        //  console.log(result);
-        //  result = playRound(playerSelection, computerSelection);
-        //} 
+        while (result.includes("tie")) {
+          console.log(result);
+          let selections = getSelections();
+          result = playRound(selections[0], selections[1]);
+        } 
         
         // Increment scores based on result
         result.includes("Win") ? playerScore++ : computerScore++;
 
+        // Print results of the round with newline
         console.log(result);
         console.log(`SCORES:  Player ${playerScore} : Computer ${computerScore}`)
+        console.log('')
       }
       
+      // Print results of the game
+      playerScore > computerScore ? console.log("You win!") : console.log("You lose :(")
     }
 
     game();

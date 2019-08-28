@@ -6,14 +6,23 @@
 <body>
   <script>
     function computerPlay(){
-        let choices = ["Rock", "Paper", "Scissors"];
-        let rand = Math.random() * choices.length;
-        rand = Math.floor(rand)
-        return choices[rand]
+      let choices = ["rock", "paper", "scissors"];
+      let rand = Math.random() * choices.length;
+      rand = Math.floor(rand)
+      return choices[rand]
     }
 
     function playRound(playerSelection, computerSelection){
-        // TBD
+      playerSelection = playerSelection.toLowerCase()
+      
+      if (playerSelection === computerSelection) {
+        return "It's a tie!"
+      } 
+      if ((playerSelection === "paper" && computerSelection === "rock") || (playerSelection === "scissors" && computerSelection === "paper") || (playerSelection === "rock" && computerSelection === "scissors")){
+        return `You Win! ${playerSelection} beats ${computerSelection}`
+      } else {
+        return `You Lose! ${computerSelection} beats ${playerSelection}`
+      }
     }
 
     const playerSelection = "rock"
